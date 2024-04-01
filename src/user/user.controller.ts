@@ -1,6 +1,6 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from './user.entity';
+import { User } from '@prisma/client';
 import { UserDto } from './dto/user.dto';
 
 @Controller('user')

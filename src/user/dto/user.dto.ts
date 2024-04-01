@@ -1,19 +1,20 @@
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { User } from "@prisma/client";
+import { IsEmail, IsInt, IsNotEmpty, IsString } from "class-validator";
 
-export class UserDto {
+export class UserDto implements User {
+
+    id: number
+    
+    @IsNotEmpty()
+    @IsString()
+    @IsEmail()
+    email: string;
 
     @IsNotEmpty()
     @IsString()
-    name: string;
-
-    @IsString()
-    description: string;
+    firstName: string;
 
     @IsNotEmpty()
     @IsString()
     lastName: string;
-
-    @IsString()
-    @IsEmail({}, {message: "Email is not valid"})
-    email: string;
 }
