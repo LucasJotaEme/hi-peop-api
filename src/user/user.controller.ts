@@ -1,7 +1,7 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Put, Query, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Put, Query, Request, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from '@prisma/client';
-import { FindUserDto, CreateUserDto, UpdatePasswordDto } from './user.dto';
+import { user } from '@prisma/client';
+import { FindUserDto, CreateUserDto, UpdatePasswordDto, UpdateUserDto } from './user.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('user')
@@ -12,7 +12,7 @@ export class UserController {
     @Get()
     @HttpCode(HttpStatus.OK)
     @UseGuards(JwtAuthGuard)
-    async find(@Query() query: FindUserDto):Promise<User>{
+    async find(@Query() query: FindUserDto):Promise<user>{
         return await this.userService.find(query);
     }
 

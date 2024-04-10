@@ -1,9 +1,9 @@
-import { UserType, User } from "@prisma/client";
+import { userType, user } from "@prisma/client";
 import { IsEmail, IsInt, IsNotEmpty, IsString, IsOptional, IsEmpty, IsIn, IsEnum } from "class-validator";
 import {ApiProperty} from "@nestjs/swagger";
 import { Transform } from "class-transformer";
 
-export class CreateUserDto implements User {
+export class CreateUserDto implements user {
 
     @IsOptional()
     id: number
@@ -25,7 +25,35 @@ export class CreateUserDto implements User {
     password: string;
 
     @IsIn(["recruiter", "candidate"])
-    userType: UserType;
+    userType: userType;
+
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export class UpdateUserDto implements user {
+
+    @IsOptional()
+    id: number
+    
+    @IsNotEmpty()
+    @IsString()
+    @IsEmail()
+    email: string;
+
+    @IsNotEmpty()
+    @IsString()
+    firstName: string;
+
+    @IsNotEmpty()
+    @IsString()
+    lastName: string;
+
+    login: string;
+    password: string;
+
+    @IsIn(["recruiter", "candidate"])
+    userType: userType;
 
     createdAt: Date;
     updatedAt: Date;

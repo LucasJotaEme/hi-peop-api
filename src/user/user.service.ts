@@ -1,13 +1,13 @@
 import { ConflictException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaClient,User, UserType } from '@prisma/client';
+import { PrismaClient,user, userType } from '@prisma/client';
 import {compare, hash} from 'bcrypt'
-import { CreateUserDto, FindUserDto, UpdatePasswordDto } from './user.dto';
+import { CreateUserDto, FindUserDto, UpdatePasswordDto, UpdateUserDto } from './user.dto';
 import { JwtPayload } from 'src/auth/jwt.strategy';
 import { LoginUserDto } from 'src/auth/auth.dto';
 
 const prisma = new PrismaClient();
 
-interface FormatLogin extends Partial<User> {
+interface FormatLogin extends Partial<user> {
     email: string
 }
 @Injectable()
@@ -29,7 +29,7 @@ export class UserService {
         });
     }
 
-    async find(payload: FindUserDto | JwtPayload): Promise<User> {
+    async find(payload: FindUserDto | JwtPayload): Promise<user> {
         
         const users = await prisma.user.findMany({
             where: {
@@ -51,35 +51,44 @@ export class UserService {
         const user = await prisma.user.findFirst({
             where: { email: email }
         });
-        
-        const areEqual = await compare(password, user.password);
-        if (!areEqual || !user) {
-            throw new HttpException("Invalid credentials", HttpStatus.UNAUTHORIZED);
-        }
+
+        await this.validateUserPassword(user, password);
+
         const {password: p, ...rest} = user;
         return rest;
     }
 
-    async updatePassword(payload: UpdatePasswordDto, id: number): Promise<User> {
+    async updatePassword(payload: UpdatePasswordDto, id: number): Promise<user> {
+        
         const user = await prisma.user.findUnique({
             where: {id}
         });
-        const areEqual = await compare(payload.oldPassword, user.password);
-        if (!areEqual || !user) {
-            throw new HttpException("Invalid credentials", HttpStatus.UNAUTHORIZED);
-        }
+
+        await this.validateUserPassword(user, payload.oldPassword);
+
         return await prisma.user.update({
             where: {id},
             data: {password:  await hash(payload.newPassword, 10)}
         });
     }
 
-    async transformUserTYpe(userType: string): Promise<UserType>{
-        switch(userType.toUpperCase()){
-            case UserType.CANDIDATE:
-                return UserType.CANDIDATE;
+    async validateUserPassword(user : user, password : string){
+        if (!user) {
+            throw new HttpException("Invalid credentials", HttpStatus.UNAUTHORIZED);
+        }
+        const areEqual = await compare(password, user.password);
+        
+        if (!areEqual) {
+            throw new HttpException("Invalid credentials", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    async transformUserTYpe(dateUserType: string): Promise<userType>{
+        switch(dateUserType.toUpperCase()){
+            case userType.CANDIDATE:
+                return userType.CANDIDATE;
             default:
-                return UserType.RECRUITER;
+                return userType.RECRUITER;
         }
     }
 

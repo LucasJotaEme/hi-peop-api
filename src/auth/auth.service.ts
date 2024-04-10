@@ -1,7 +1,7 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {JwtService} from "@nestjs/jwt";
 import {JwtPayload} from "./jwt.strategy";
-import {PrismaClient, User} from '@prisma/client'
+import {PrismaClient, user} from '@prisma/client'
 import {hash} from "bcrypt";
 import { UserService } from 'src/user/user.service';
 import { CreateUserDto, } from 'src/user/user.dto';
@@ -84,10 +84,10 @@ export interface RegistrationStatus{
     success: boolean;
     expiresIn?: string;
     Authorization?: string;
-    data?: User;
+    data?: user;
 }
 export interface RegistrationSeederStatus {
     success: boolean;
     message: string;
-    data?: User[];
+    data?: user[];
 }
