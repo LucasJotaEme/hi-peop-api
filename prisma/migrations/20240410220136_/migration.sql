@@ -1,8 +1,8 @@
 -- CreateEnum
-CREATE TYPE "UserType" AS ENUM ('RECRUITER', 'CANDIDATE');
+CREATE TYPE "userType" AS ENUM ('RECRUITER', 'CANDIDATE');
 
 -- CreateTable
-CREATE TABLE "User" (
+CREATE TABLE "user" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "firstName" TEXT,
@@ -10,10 +10,10 @@ CREATE TABLE "User" (
     "password" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "userType" "UserType" NOT NULL DEFAULT 'RECRUITER',
+    "userType" "userType" NOT NULL DEFAULT 'RECRUITER',
 
-    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "user_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+CREATE UNIQUE INDEX "user_email_key" ON "user"("email");

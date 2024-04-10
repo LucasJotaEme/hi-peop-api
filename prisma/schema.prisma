@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model user {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   firstName String?
@@ -15,10 +15,10 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-  userType  UserType @default(RECRUITER)
+  userType  userType @default(RECRUITER)
 }
 
-enum UserType {
+enum userType {
   RECRUITER
   CANDIDATE
 }
