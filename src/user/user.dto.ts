@@ -1,9 +1,9 @@
 import { userType, user } from "@prisma/client";
-import { IsEmail, IsInt, IsNotEmpty, IsString, IsOptional, IsEmpty, IsIn, IsEnum } from "class-validator";
+import { IsEmail, IsInt, IsNotEmpty, IsString, IsOptional, IsEmpty, IsIn, IsEnum, max, Max, IsPositive, IsNumber } from "class-validator";
 import {ApiProperty} from "@nestjs/swagger";
 import { Transform } from "class-transformer";
 
-export class CreateUserDto implements user {
+export class CreateUserDto {
 
     @IsOptional()
     id: number
@@ -21,7 +21,6 @@ export class CreateUserDto implements user {
     @IsString()
     lastName: string;
 
-    login: string;
     password: string;
 
     @IsIn(["recruiter", "candidate"])
@@ -31,7 +30,7 @@ export class CreateUserDto implements user {
     updatedAt: Date;
 }
 
-export class UpdateUserDto implements user {
+export class UpdateUserDto {
 
     @IsOptional()
     id: number
@@ -49,14 +48,19 @@ export class UpdateUserDto implements user {
     @IsString()
     lastName: string;
 
-    login: string;
-    password: string;
-
     @IsIn(["recruiter", "candidate"])
     userType: userType;
 
     createdAt: Date;
     updatedAt: Date;
+}
+
+export class DeleteUserDto {
+
+    @IsNotEmpty()
+    @IsString()
+    @IsEmail()
+    email: string;
 }
 
 export class UpdatePasswordDto {
@@ -73,14 +77,37 @@ export class FindUserDto {
 
     @IsString()
     @IsOptional()
+    email: string;
+}
+
+export class UserPagerDto {
+
+    @IsString()
+    @IsOptional()
     id: string;
 
     @IsString()
     @IsOptional()
-    email: string;
+    name: string;
 
     @IsString()
-    @IsEmpty()
     @IsOptional()
-    password: string;
+    @IsIn(["recruiter", "candidate"])
+    userType: userType;
+
+    @IsString()
+    @IsOptional()
+    @IsIn(["id", "email", "type"])
+    orderBy: string;
+
+    @IsString()
+    @IsOptional()
+    @IsIn(["asc", "desc"])
+    order: string;
+
+    @IsOptional()
+    count?: string;
+
+    @IsOptional()
+    page?: string;
 }

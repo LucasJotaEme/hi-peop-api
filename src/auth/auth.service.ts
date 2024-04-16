@@ -37,7 +37,7 @@ export class AuthService {
             
         } catch (error) {
             console.log(error);
-            throw new HttpException(error, HttpStatus.BAD_REQUEST);
+            throw new HttpException(error, HttpStatus.CONFLICT);
         }
         return status;
     }
@@ -64,7 +64,7 @@ export class AuthService {
     async validateUser(payload: JwtPayload): Promise<any> {
         const user = await this.userService.find(payload);
         if (!user) {
-            throw new HttpException("INVALID_TOKEN", 
+            throw new HttpException("Invalid token", 
                HttpStatus.UNAUTHORIZED);
         }
         return user;
