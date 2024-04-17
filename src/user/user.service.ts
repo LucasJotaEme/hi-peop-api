@@ -158,7 +158,7 @@ export class UserService {
         const areEqual = await compare(password, user.password);
         
         if (!areEqual) {
-            throw new HttpException("Las credenciales ingresadas no son válidas. Por favor, verifique su correo electrónico y contraseña e inténtelo de nuevo.", HttpStatus.UNAUTHORIZED);
+            throw new HttpException("Contraseña no válida", HttpStatus.BAD_REQUEST);
         }
     }
 
